@@ -77,7 +77,7 @@ const router = createBrowserRouter([
     {
       path:'/dashboard/editItem/:id',
       element: <EditTodo></EditTodo>,
-      loader:({params})=>fetch(`http://localhost:5000/createTask/${params.id}`)
+      loader:({params})=>fetch(`https://task-management-server-sepia.vercel.app/createTask/${params.id}`)
     },
     {
       path:'/dashboard/updateUser',
