@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthProvider } from "../../Providers/AuthProviders";
 
 const Register = () => {
   const {createUser} = useContext(AuthProvider);
   const [error, setError] = useState('');
-
+  const navigate = useNavigate()
   const handleSignUP = e =>{
     e.preventDefault();
     const form = e.target;
@@ -14,6 +14,14 @@ const Register = () => {
     const password = form .password.value;
 
     setError('');
+    if(password.length < 6){
+      setError('Password should be at least 6 characters');
+      return;
+    }
+    else if(!/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{6,}$/.test(password)){
+      setError('YOur password should have at least six Characters,One Upper Case, & Special character');
+      return;
+    }
 
     createUser(email, password)
     .then(() => {
@@ -25,7 +33,8 @@ const Register = () => {
         showConfirmButton: false,
         timer: 1500
       });
-      // todo: navigate and add password regex
+      navigate('/')
+      
     })
     .catch(() => {
       setError('Please Provide The Correct Information')

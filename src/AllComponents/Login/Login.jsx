@@ -1,41 +1,117 @@
 import { useContext, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 import { AuthProvider } from "../../Providers/AuthProviders";
 import Swal from "sweetalert2";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GithubAuthProvider } from "firebase/auth";
+import auth from "../../../firebase.init";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+
 
 const Login = () => {
 
   const {userLogin} = useContext(AuthProvider)
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
 
+  const handleGoogle = ()=>{
+      signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        navigate('/dashboard')
+        Swal.fire({
+        
+          position: "top-end",
+          icon: "success",
+          title: "Login Successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  }
+
+  const handleGithub = ()=>{
+    signInWithPopup(auth, githubProvider)
+    .then((result) => {
+      // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      // The signed-in user info.
+      const user = result.user;
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
+      navigate('/dashboard')
+        Swal.fire({
+        
+          position: "top-end",
+          icon: "success",
+          title: "Login Successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GithubAuthProvider.credentialFromError(error);
+      // ...
+    });
+  }
+
+
+  
   const handleLogin = e =>{
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-
+    
     setError('')
-
+    
     userLogin(email, password)
     .then(() => {
-
+      navigate('/dashboard')
       // alert
       Swal.fire({
+        
         position: "top-end",
         icon: "success",
         title: "Login Successfully",
         showConfirmButton: false,
         timer: 1500
       });
-      //todo: navigate
+      
       
     })
     .catch(() => {
       setError('Email Or Password Is Wrong')
     });
   }
-
+  
 
   return (
     <div>
@@ -78,6 +154,12 @@ const Login = () => {
               }
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
+              </div>
+
+              <div className="flex gap-2">
+                Sign in with
+                <button onClick={handleGoogle}><FcGoogle /></button>
+                <button onClick={handleGithub}><FaGithub /></button>
               </div>
 
               <Link

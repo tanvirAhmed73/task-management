@@ -7,7 +7,7 @@ const Home = () => {
         className="hero min-h-screen"
         style={{
           backgroundImage:
-            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
+            "url(https://snacknation.com/wp-content/uploads/2020/12/Best-Task-Management-Software-Platforms.png)",
         }}
       >
         <div className="hero-overlay bg-opacity-60"></div>
@@ -15,9 +15,7 @@ const Home = () => {
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
             <p className="mb-5">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+              Welcome To "Task Management Website".
             </p>
         <Link to={'/login'}>
             <button className="btn btn-primary">Let’s Explore</button>

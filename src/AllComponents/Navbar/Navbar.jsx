@@ -1,10 +1,21 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link,} from "react-router-dom";
 import { AuthProvider } from "../../Providers/AuthProviders";
 
 const Navbar = () => {
-  const {user} = useContext(AuthProvider);
-  console.log(user)
+  const {user,loading,logOut} = useContext(AuthProvider);
+  
+  const handleLogOut=()=>{
+    logOut()
+    .then(() => {
+      // Sign-out successful.
+      // todo: navigate to the home
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
+
+
   return (
     <div>
       <div className="navbar bg-base-100">
@@ -31,49 +42,35 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a>Item 1</a>
+                <Link to={'/'}>Home</Link>
               </li>
               <li>
-                <a>Item 3</a>
+                <Link to={'/dashboard'}>DashBoard</Link>
               </li>
               <li>
-                <a>Item 3</a>
+              <Link to={'/terms'}>Terms & Conditions</Link>
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">Task Management</a>
+          <h1 className=" text-xl">Task Management</h1>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
+                <Link to={'/'}>Home</Link>
+              </li>
+              <li>
+                <Link to={'/dashboard'}>DashBoard</Link>
+              </li>
+              <li>
+              <Link to={'/terms'}>Terms & Conditions</Link>
+              </li>
           </ul>
         </div>
         <div className="navbar-end">
           {
             user?
-            <div>
-              {
-                user.displayName?
-                <div>
-                  {user.displayName}
-                  <button className="btn">Log Out</button>
-                </div>
-                :
-                <div>
-                  <p>{user.email}</p>
-                  <button className="btn">Log Out</button>
-                </div>
-                
-              }
-            </div>
+            <button onClick={handleLogOut} className="btn">Log Out</button>   
             :
             <Link to={'/signUp'} className="btn">login/register</Link>
           }
